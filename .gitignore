@@ -1,0 +1,30 @@
+# General
+.env
+.docker.env
+
+# Editors
+.vscode/
+
+# Virtual Environment
+.venv/
+env/
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+
+build/
+dist/
+eggs/
+.eggs/
+sdist/
+wheels/
+*.egg-info/
+
+.python-version
+
+.mypy_cache/
+
+# Misc
+data/

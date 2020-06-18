@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  mongodb:
+    image: mongo:4.2
+    environment:
+      MONGO_INITDB_DATABASE:
+      MONGO_INITDB_ROOT_USERNAME:
+      MONGO_INITDB_ROOT_PASSWORD:
+      MONGODB_USERNAME:
+      MONGODB_PASSWORD:
+      MONGODB_DB:
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data:/data/db
+      - ./mongodb:/docker-entrypoint-initdb.d:ro
+
+  application:
+    build: .
+    image: movieflix
+    environment:
+      MONGODB_HOST: mongodb
+      MONGODB_PORT: 27017
+      MONGODB_DB:
+      MONGODB_USERNAME:
+      MONGODB_PASSWORD:
+    ports:
+      - 5000:5000
+    depends_on:
+      - mongodb
