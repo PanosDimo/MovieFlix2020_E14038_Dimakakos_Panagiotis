@@ -36,6 +36,10 @@ def create_app() -> Flask:
 
     mongo.init_app(app)
 
+    from . import routes
+
+    routes.init_app(app)
+
     app.logger.info("Application created successfully.")
 
     return app
