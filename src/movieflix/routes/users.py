@@ -16,10 +16,17 @@ blueprint = Blueprint("users", __name__, url_prefix="/users")
 @response_schema(schemas.AuthenticateUserResponse)
 def authenticate_user(
     *, args: schemas.AuthenticateUserRequest
-) -> RouteResponsePre:  # type: ignore
-    """Authenticate user endpoint.
-
-    :return: The flask response.
-    """
+) -> RouteResponsePre:
+    """Authenticate user endpoint."""
     result = methods.authenticate_user(credentials=args)
     return result, 200
+
+
+@blueprint.route("/register", methods=["POST"])
+@accepts(ContentType.JSON)
+@request_schema(schemas.RegisterUserRequest)
+@response_schema(schemas.RegisterUserResponse)
+def register_user(*, args: schemas.RegisterUserRequest) -> RouteResponsePre:
+    """Register user endpoint."""
+    result = methods.register_user(info=args)
+    return result, 201

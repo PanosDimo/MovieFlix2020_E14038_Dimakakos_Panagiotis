@@ -25,7 +25,7 @@ class UserComment(Comment):
 class UserRef(BaseModel):
     """User Reference Model."""
 
-    id: UUID = Field(default_factory=uuid4)
+    id: UUID = Field(default_factory=uuid4, alias="_id")
 
 
 class User(UserRef):
