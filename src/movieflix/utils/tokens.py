@@ -17,11 +17,7 @@ def generate(payload: UserRef) -> str:
     delta = timedelta(minutes=SETTINGS.ACCESS_TOKEN_EXPIRE_MINUTES)
     now = datetime.utcnow()
     return jwt.encode(
-        {
-            "exp": now + delta,
-            "iat": now,
-            "payload": json.loads(payload.json(by_alias=True)),
-        },
+        {"exp": now + delta, "iat": now, "payload": json.loads(payload.json(by_alias=True))},
         SETTINGS.SECRET_KEY,
         algorithm="HS256",
     ).decode()

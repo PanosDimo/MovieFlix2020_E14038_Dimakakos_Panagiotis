@@ -5,7 +5,7 @@ from typing import Any
 from flask import abort, g
 
 from ..models.users import Role, User
-from ..types import RouteResponse, Route
+from ..types import Route, RouteResponse
 
 
 def is_admin(function: Route) -> Route:

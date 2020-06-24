@@ -20,9 +20,7 @@ def create_app() -> Flask:
     app.config["SETTINGS"] = SETTINGS
 
     basicConfig(
-        format=SETTINGS.LOG_FMT,
-        datefmt=SETTINGS.LOG_DATEFMT,
-        level=str(SETTINGS.LOG_LEVEL),
+        format=SETTINGS.LOG_FMT, datefmt=SETTINGS.LOG_DATEFMT, level=str(SETTINGS.LOG_LEVEL)
     )
     getLogger("werkzeug").disabled = True
 

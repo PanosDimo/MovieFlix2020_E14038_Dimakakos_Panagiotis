@@ -14,9 +14,7 @@ blueprint = Blueprint("users", __name__, url_prefix="/users")
 @accepts(ContentType.JSON)
 @request_schema(schemas.AuthenticateUserRequest)
 @response_schema(schemas.AuthenticateUserResponse)
-def authenticate_user(
-    *, args: schemas.AuthenticateUserRequest
-) -> RouteResponsePre:
+def authenticate_user(*, args: schemas.AuthenticateUserRequest) -> RouteResponsePre:
     """Authenticate user endpoint."""
     result = methods.authenticate_user(credentials=args)
     return result, 200

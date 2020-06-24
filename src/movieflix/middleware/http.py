@@ -18,26 +18,20 @@ def init_app(app: Flask) -> None:
         for key, value in request.args.items():
             if key in gathered:
                 logger.warn(
-                    "Key %s found @ args already exists "
-                    "and will be overwritten",
-                    key,
+                    "Key %s found @ args already exists " "and will be overwritten", key,
                 )
             gathered[key] = value
         for key, value in request.form.items():
             if key in gathered:
                 logger.warn(
-                    "Key %s found @ form already exists "
-                    "and will be overwritten",
-                    key,
+                    "Key %s found @ form already exists " "and will be overwritten", key,
                 )
             gathered[key] = value
         if request.get_json(silent=True):
             for key, value in request.json.items():
                 if key in gathered:
                     logger.warn(
-                        "Key %s found @ json already exists "
-                        "and will be overwritten",
-                        key,
+                        "Key %s found @ json already exists " "and will be overwritten", key,
                     )
                 gathered[key] = value
         if request.files:
@@ -46,9 +40,7 @@ def init_app(app: Flask) -> None:
             for key, value in request.view_args.items():
                 if key in gathered:
                     logger.warn(
-                        "Key %s found @ view_args already exists "
-                        "and will be overwritten",
-                        key,
+                        "Key %s found @ view_args already exists " "and will be overwritten", key,
                     )
                 gathered[key] = value
         g.input = gathered

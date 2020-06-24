@@ -8,9 +8,7 @@ from ..schemas import users as schemas
 from ..utils import crypto, tokens
 
 
-def authenticate_user(
-    credentials: schemas.AuthenticateUserRequest,
-) -> models.UserWithToken:
+def authenticate_user(credentials: schemas.AuthenticateUserRequest) -> models.UserWithToken:
     """Authenticate a user.
 
     :param credentials: The user's credentials.
@@ -42,10 +40,7 @@ def register_user(info: schemas.RegisterUserRequest) -> models.User:
     # Create the user.
     hashed_password = crypto.hashify(info.password)
     user = models.UserInDB(
-        email=info.email,
-        name=info.name,
-        password=hashed_password,
-        category=models.Role.USER,
+        email=info.email, name=info.name, password=hashed_password, category=models.Role.USER
     )
     app.logger.info("Creating user %s", user.id)
     users.insert_one(user.dict(by_alias=True))

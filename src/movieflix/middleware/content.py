@@ -5,7 +5,7 @@ from typing import Any, Optional
 
 from flask import abort, request
 
-from ..types import RouteResponse, Route, RouteDecorator
+from ..types import Route, RouteDecorator, RouteResponse
 
 
 class ContentType(str, Enum):
@@ -34,21 +34,13 @@ def accepts(content_type: Optional[ContentType]) -> RouteDecorator:
             # Content expected, but request has no content.
             if content_type and not request.content_length:
                 abort(
-                    415,
-                    f"Expected content of type {content_type}, "
-                    f"but got no content",
+                    415, f"Expected content of type {content_type}, but got no content",
                 )
             # Content type and request content (check matching).
             actual_content_type = request.mimetype
-            if (
-                content_type
-                and request.content_length
-                and actual_content_type != content_type
-            ):
+            if content_type and request.content_length and actual_content_type != content_type:
                 abort(
-                    415,
-                    f"Expected content of type {content_type}, "
-                    f"but got {actual_content_type}",
+                    415, f"Expected content of type {content_type}, but got {actual_content_type}",
                 )
             return function(*args, **kwargs)
 

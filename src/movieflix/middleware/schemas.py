@@ -9,7 +9,7 @@ from pydantic import BaseModel, ValidationError
 from ..types import Route, RouteDecorator, RouteResponse, RouteResponsePre
 
 Schema = Type[BaseModel]
-RoutePre = Callable[..., RouteResponsePre]  # type: ignore
+RoutePre = Callable[..., RouteResponsePre]
 
 
 def request_schema(schema: Schema, kwarg: str = "args") -> RouteDecorator:
@@ -53,15 +53,9 @@ def response_schema(schema: Optional[Schema]) -> Callable[[RoutePre], Route]:
                     status,
                 )
             if schema is not None and data is None:
-                abort(
-                    500,
-                    "Do not specify a response model when returning "
-                    "a response.",
-                )
+                abort(500, "Do not specify a response model when returning a response.")
             if schema is None and data is not None:
-                abort(
-                    500, "Specify a response model when returning a response."
-                )
+                abort(500, "Specify a response model when returning a response.")
             return jsonify(), status
 
         return wrapper

@@ -37,9 +37,7 @@ class Settings(BaseSettings):
     MONGODB_URI: Optional[str] = None
 
     @validator("MONGODB_URI", pre=True)
-    def assemble_mongodb_uri(
-        cls, v: Optional[str], values: Dict[str, Any]
-    ) -> str:
+    def assemble_mongodb_uri(cls, v: Optional[str], values: Dict[str, Any]) -> str:
         """Create MongoDB URI."""
         if v:
             return v
