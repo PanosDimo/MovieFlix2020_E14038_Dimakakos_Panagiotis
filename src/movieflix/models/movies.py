@@ -29,3 +29,9 @@ class Movie(Base, MovieRef):
     actors: List[str] = Field(default_factory=list)
     rating: float = Field(..., ge=0, le=10)
     comments: List[MovieComment] = Field(default_factory=list)
+
+
+class Movies(BaseModel):
+    """Movies Model."""
+
+    movies: List[Movie]

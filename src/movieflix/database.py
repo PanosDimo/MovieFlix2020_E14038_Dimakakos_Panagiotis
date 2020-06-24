@@ -1,20 +1,18 @@
 """Database Initialization."""
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
 
 from flask import Flask
 from pymongo import MongoClient
+from pymongo.database import Database
 
-if TYPE_CHECKING:
-    from pymongo.database import Database
-    from .settings import Settings
+from .settings import Settings
 
 
 class Mongo:
     """Mongo Connection Class."""
 
-    if TYPE_CHECKING:
-        client: MongoClient
-        database: Database
+    client: MongoClient
+    database: Database
 
     def __init__(self, app: Optional[Flask] = None) -> None:
         """Initialize instance."""

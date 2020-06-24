@@ -20,7 +20,7 @@ def generate(payload: UserRef) -> str:
         {
             "exp": now + delta,
             "iat": now,
-            "payload": json.loads(payload.json()),
+            "payload": json.loads(payload.json(by_alias=True)),
         },
         SETTINGS.SECRET_KEY,
         algorithm="HS256",

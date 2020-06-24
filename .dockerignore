@@ -26,6 +26,9 @@ wheels/
 
 .mypy_cache/
 
+# Misc
+data/
+
 # Docker specific
 .git/
 .gitignore

@@ -1,4 +1,4 @@
-FROM python:3.8.3-slim
+FROM python:3.8.3
 
 WORKDIR /app
 
@@ -15,5 +15,8 @@ RUN poetry install --no-dev --no-root
 
 # Copy application.
 COPY . /app/
+
+# Install application.
+RUN poetry install --no-dev
 
 ENTRYPOINT ["gunicorn", "-c", "gunicorn.conf.py", "movieflix.app:create_app()"]
