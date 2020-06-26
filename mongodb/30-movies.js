@@ -16,7 +16,7 @@ db.movies.insertOne({
   rating: 7.6,
   comments: [
     {
-      user: BinData(3, "KJ8cKJ3BS8+vSrnph5T4dQ=="),
+      user: "admin@movieflix.com",
       comment:
         "To millions of children of all ages, November 16 has been more eagerly anticipated than Christmas, as the long-awaited film version of J. K. Rowling's beloved novel Harry Potter and the Sorceror's Stone hits the screen.",
     },

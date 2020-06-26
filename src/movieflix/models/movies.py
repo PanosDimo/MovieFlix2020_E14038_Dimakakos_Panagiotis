@@ -2,7 +2,7 @@
 from typing import List
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, EmailStr, Field
 
 from ._base import Base
 from .comments import Comment
@@ -11,7 +11,13 @@ from .comments import Comment
 class MovieComment(Comment):
     """Comment made to a movie."""
 
-    user: UUID
+    user: EmailStr
+
+
+class MovieComments(BaseModel):
+    """Comments made to a movie."""
+
+    comments: List[MovieComment]
 
 
 class MovieRef(BaseModel):

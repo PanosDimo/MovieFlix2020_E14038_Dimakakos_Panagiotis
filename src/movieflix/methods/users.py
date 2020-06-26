@@ -32,6 +32,7 @@ def register_user(info: schemas.RegisterUserRequest) -> models.User:
     """Register a new user.
 
     :param info: The user's information.
+    :return: The user.
     """
     users = mongo.database.get_collection("users")
     # Check if user already exists.

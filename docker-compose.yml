@@ -29,6 +29,7 @@ services:
       MONGODB_PASSWORD:
       MAX_WORKERS:
       PORT: ${PORT:-5000}
+      SECRET_KEY: ${SECRET_KEY:-supersecretkey}
     ports:
       - 5000:${PORT:-5000}
     volumes:

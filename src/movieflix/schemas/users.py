@@ -7,14 +7,14 @@ from ..models.users import Role
 
 
 class AuthenticateUserRequest(BaseModel):
-    """Authenticate User Request."""
+    """AUTHENTICATE USER Request."""
 
     email: str
     password: str
 
 
 class AuthenticateUserResponse(BaseModel):
-    """Authenticate User Response."""
+    """AUTHENTICATE USER Response."""
 
     id: UUID
     name: str
@@ -23,7 +23,7 @@ class AuthenticateUserResponse(BaseModel):
 
 
 class RegisterUserRequest(BaseModel):
-    """Register User Request."""
+    """REGISTER USER Request."""
 
     email: EmailStr
     name: str
@@ -31,7 +31,7 @@ class RegisterUserRequest(BaseModel):
 
 
 class RegisterUserResponse(BaseModel):
-    """Register User Response."""
+    """REGISTER USER Response."""
 
     id: UUID
     email: EmailStr

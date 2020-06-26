@@ -2,11 +2,11 @@
 from typing import List, Optional
 from uuid import UUID
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, EmailStr, Field, validator
 
 
 class SearchMoviesRequest(BaseModel):
-    """Search Movies Request."""
+    """SEARCH MOVIES Request."""
 
     title: Optional[str] = None
     year: Optional[int] = None
@@ -27,12 +27,46 @@ class SearchMoviesRequest(BaseModel):
 
 
 class SearchMoviesResponse(BaseModel):
-    """Search Movies Response."""
+    """SEARCH MOVIES Response."""
 
     class Movie(BaseModel):
         """Helper Movie class."""
 
         id: UUID
         title: str
+        year: int
 
     movies: List[Movie]
+
+
+class GetMovieRequest(BaseModel):
+    """GET MOVIE Request."""
+
+    movie: UUID
+
+
+class GetMovieResponse(BaseModel):
+    """GET MOVIE Response."""
+
+    title: str
+    year: int
+    description: str
+    actors: List[str]
+
+
+class GetCommentsRequest(BaseModel):
+    """GET COMMENTS Request."""
+
+    movie: UUID
+
+
+class GetCommentsResponse(BaseModel):
+    """GET COMMENTS Response."""
+
+    class Comment(BaseModel):
+        """Helper Comment class."""
+
+        comment: str
+        user: EmailStr
+
+    comments: List[Comment]

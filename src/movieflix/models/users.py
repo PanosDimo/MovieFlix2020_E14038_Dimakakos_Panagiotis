@@ -3,7 +3,7 @@ from enum import Enum
 from typing import List
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, EmailStr, Field
 
 from ._base import Base
 from .comments import Comment
@@ -32,7 +32,7 @@ class User(UserRef):
     """User Model."""
 
     name: str
-    email: str
+    email: EmailStr
     comments: List[UserComment] = Field(default_factory=list)
     category: Role
 
