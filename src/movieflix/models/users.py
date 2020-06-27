@@ -6,7 +6,6 @@ from uuid import UUID, uuid4
 from pydantic import BaseModel, EmailStr, Field
 
 from ._base import Base
-from .comments import Comment
 
 
 class Role(str, Enum):
@@ -14,12 +13,6 @@ class Role(str, Enum):
 
     ADMIN = "ADMIN"
     USER = "USER"
-
-
-class UserComment(Comment):
-    """Comment made by user."""
-
-    movie: UUID
 
 
 class UserRef(BaseModel):
@@ -33,7 +26,7 @@ class User(UserRef):
 
     name: str
     email: EmailStr
-    comments: List[UserComment] = Field(default_factory=list)
+    comments: List[UUID] = Field(default_factory=list)
     category: Role
 
 

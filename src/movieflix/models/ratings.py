@@ -1,4 +1,4 @@
-"""Comments Models."""
+"""Ratings Models."""
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, EmailStr, Field
@@ -12,7 +12,7 @@ class Comment(BaseModel):
     id: UUID = Field(default_factory=uuid4, alias="_id")
     movie: UUID
     user: EmailStr
-    comment: str
+    rating: float = Field(..., ge=0, le=10)
 
 
 class CommentInDB(Base, Comment):

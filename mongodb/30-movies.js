@@ -14,13 +14,9 @@ db.movies.insertOne({
     "Richard Harris",
   ],
   rating: 7.6,
-  comments: [
-    {
-      user: "admin@movieflix.com",
-      comment:
-        "To millions of children of all ages, November 16 has been more eagerly anticipated than Christmas, as the long-awaited film version of J. K. Rowling's beloved novel Harry Potter and the Sorceror's Stone hits the screen.",
-    },
-  ],
+  comments: [BinData(3, "gYpLiW0KRAmRQ7Y3AJeA0w==")],
+  created_at: ISODate("2020-06-27T08:35:30.287Z"),
+  updated_at: ISODate("2020-06-27T08:35:30.287Z"),
 });
 db.movies.insertOne({
   _id: BinData(3, "2WVzJotuRYG+O07vWIkl7A=="),
@@ -37,6 +33,8 @@ db.movies.insertOne({
   ],
   rating: 7.4,
   comments: [],
+  created_at: ISODate("2020-06-27T08:35:30.287Z"),
+  updated_at: ISODate("2020-06-27T08:35:30.287Z"),
 });
 db.movies.insertOne({
   _id: BinData(3, "HRhSS8clQsy6JUcL4M0wAw=="),
@@ -55,6 +53,8 @@ db.movies.insertOne({
   ],
   rating: 7.9,
   comments: [],
+  created_at: ISODate("2020-06-27T08:35:30.287Z"),
+  updated_at: ISODate("2020-06-27T08:35:30.287Z"),
 });
 db.movies.insertOne({
   _id: BinData(3, "Hw3mcFWmQAeFIDB8FeC1Gw=="),
@@ -74,6 +74,8 @@ db.movies.insertOne({
   ],
   rating: 7.7,
   comments: [],
+  created_at: ISODate("2020-06-27T08:35:30.287Z"),
+  updated_at: ISODate("2020-06-27T08:35:30.287Z"),
 });
 db.movies.insertOne({
   _id: BinData(3, "Q6DHE48TQjK4WdMU2joOJg=="),
@@ -91,6 +93,8 @@ db.movies.insertOne({
   ],
   rating: 7.5,
   comments: [],
+  created_at: ISODate("2020-06-27T08:35:30.287Z"),
+  updated_at: ISODate("2020-06-27T08:35:30.287Z"),
 });
 db.movies.insertOne({
   _id: BinData(3, "P5iyoXoyRhWAhgabsd9gyw=="),
@@ -108,6 +112,8 @@ db.movies.insertOne({
   ],
   rating: 7.6,
   comments: [],
+  created_at: ISODate("2020-06-27T08:35:30.287Z"),
+  updated_at: ISODate("2020-06-27T08:35:30.287Z"),
 });
 db.movies.insertOne({
   _id: BinData(3, "y41fXmNQSZC12m0QUgnrWQ=="),
@@ -124,6 +130,8 @@ db.movies.insertOne({
   ],
   rating: 7.7,
   comments: [],
+  created_at: ISODate("2020-06-27T08:35:30.287Z"),
+  updated_at: ISODate("2020-06-27T08:35:30.287Z"),
 });
 db.movies.insertOne({
   _id: BinData(3, "X/BbfU37QNKHjyFSc0tS/A=="),
@@ -140,4 +148,6 @@ db.movies.insertOne({
   ],
   rating: 8.1,
   comments: [],
+  created_at: ISODate("2020-06-27T08:35:30.287Z"),
+  updated_at: ISODate("2020-06-27T08:35:30.287Z"),
 });

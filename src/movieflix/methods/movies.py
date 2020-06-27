@@ -39,15 +39,18 @@ def get_movie(args: schemas.GetMovieRequest) -> models.Movie:
     return models.Movie(**datum)
 
 
-def get_comments(args: schemas.GetCommentsRequest) -> models.MovieComments:
+def get_comments(args: schemas.GetCommentsRequest) -> models.MovieDeref:
     """Get comments.
 
     :param args: The arguments of the request.
     :return: The comments.
     """
     movies = mongo.database.get_collection("movies")
+    comments = mongo.database.get_collection("comments")
     datum = movies.find_one({"_id": args.movie})
     if not datum:
         abort(404, f"Movie {args.movie} not found")
     movie = models.Movie(**datum)
-    return models.MovieComments(comments=movie.comments)
+    data = comments.find({"_id": {"$in": movie.comments}})
+    comments = [models.Comment(**datum) for datum in data]
+    return models.MovieDeref(comments=comments, **movie.dict(by_alias=True, exclude={"comments"}))
