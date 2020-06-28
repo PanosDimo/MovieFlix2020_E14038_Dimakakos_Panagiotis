@@ -66,4 +66,21 @@ def get_my_comments() -> Comments:
         movie = MovieInDB(**movies.find_one({"_id": comment.movie}))
         new_datum = {**comment.dict(exclude={"movie"}), "movie": movie.title}
         res.append(new_datum)
-    return Comments(comments=res)
+    return Comments(comments=res)  # type: ignore
+
+
+def get_all_comments() -> Comments:
+    """Get all users' comments.
+
+    :return: The comments.
+    """
+    movies = mongo.database.get_collection("movies")
+    comments = mongo.database.get_collection("comments")
+    data = comments.find({})
+    res = []
+    for datum in data:
+        comment = CommentInDB(**datum)
+        movie = MovieInDB(**movies.find_one({"_id": comment.movie}))
+        new_datum = {**comment.dict(exclude={"movie"}), "movie": movie.title}
+        res.append(new_datum)
+    return Comments(comments=res)  # type: ignore

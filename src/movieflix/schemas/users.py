@@ -51,3 +51,17 @@ class GetCommentsResponse(BaseModel):
         comment: str
 
     comments: List[Comment]
+
+
+class GetAllCommentsResponse(BaseModel):
+    """GET ALL USERS COMMENTS Response."""
+
+    class Comment(BaseModel):
+        """Helper Comment class."""
+
+        id: UUID
+        movie: str
+        user: EmailStr
+        comment: str
+
+    comments: List[Comment]

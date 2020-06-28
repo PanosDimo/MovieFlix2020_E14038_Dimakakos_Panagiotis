@@ -4,7 +4,7 @@ from typing import Any
 
 from flask import abort, g
 
-from ..models.users import Role, User
+from ..models.users import Role, UserInDB
 from ..types import Route, RouteResponse
 
 
@@ -21,7 +21,7 @@ def is_admin(function: Route) -> Route:
 
     @wraps(function)
     def wrapper(*args: Any, **kwargs: Any) -> RouteResponse:
-        user: User = g.user
+        user: UserInDB = g.user
         if user.category != Role.ADMIN:
             abort(403)
         return function(*args, **kwargs)
