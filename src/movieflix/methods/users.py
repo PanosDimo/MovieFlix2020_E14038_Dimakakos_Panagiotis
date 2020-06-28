@@ -117,3 +117,11 @@ def delete_my_comment(args: schemas.DeleteCommentRequest) -> None:
         abort(404, f"Comment {args.comment} not found")
     comments.delete_one({"_id": args.comment, "user": user.email})
     return None
+
+
+def delete_my_account() -> None:
+    """Delete user's account."""
+    user: models.UserInDB = g.user
+    users = mongo.database.get_collection("users")
+    users.delete_one({"_id": user.id})
+    return None

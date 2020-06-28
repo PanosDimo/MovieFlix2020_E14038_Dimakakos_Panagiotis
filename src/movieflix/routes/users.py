@@ -72,3 +72,13 @@ def delete_my_comment(*, args: schemas.DeleteCommentRequest, comment: str) -> Ro
     """Delete user's comment endpoint."""
     methods.delete_my_comment(args)
     return None, 204
+
+
+@blueprint.route("/my/account", methods=["DELETE"])
+@accepts(None)
+@login_required
+@response_schema(None)
+def delete_my_account() -> RouteResponsePre:
+    """Delete user's account."""
+    methods.delete_my_account()
+    return None, 204
