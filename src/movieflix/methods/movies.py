@@ -94,5 +94,34 @@ def rate_movie(args: schemas.RateMovieRequest) -> None:
     movie.rating = new_rating
     movie.updated_at = datetime.utcnow()
     movies.update_one({"_id": movie.id}, {"$set": movie.dict(by_alias=True, exclude={"id"})})
+    return None
 
+
+def remove_movie_rating(args: schemas.RemoveMovieRatingRequest) -> None:
+    """Remove movie rating.
+
+    :param args: The arguments of the request.
+    """
+    movies = mongo.database.get_collection("movies")
+    ratings = mongo.database.get_collection("ratings")
+    user: User = g.user
+    datum = movies.find_one({"_id": args.movie})
+    if not datum:
+        abort(404, f"Movie {args.movie} not found")
+    movie = models.MovieInDB(**datum)
+    datum = ratings.find_one({"movie": args.movie, "user": user.email})
+    if not datum:
+        return None
+    ratings.delete_one({"movie": args.movie, "user": user.email})
+    data = ratings.find({"movie": args.movie})
+    new_rating = 0.0
+    num = 0
+    for datum in data:
+        new_rating += RatingInDB(**datum).rating
+        num += 1
+    if num:
+        new_rating = new_rating / num
+    movie.rating = new_rating
+    movie.updated_at = datetime.utcnow()
+    movies.update_one({"_id": movie.id}, {"$set": movie.dict(by_alias=True, exclude={"id"})})
     return None

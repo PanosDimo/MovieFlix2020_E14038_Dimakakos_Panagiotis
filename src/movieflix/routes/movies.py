@@ -53,3 +53,14 @@ def rate_movie(*, args: schemas.RateMovieRequest, movie: str) -> RouteResponsePr
     """Rate movie endpoint."""
     methods.rate_movie(args)
     return None, 204
+
+
+@blueprint.route("/<movie>/rate", methods=["DELETE"])
+@accepts(None)
+@login_required
+@request_schema(schemas.RemoveMovieRatingRequest)
+@response_schema(None)
+def remove_movie_rating(*, args: schemas.RemoveMovieRatingRequest, movie: str) -> RouteResponsePre:
+    """Remove movie rating endpoint."""
+    methods.remove_movie_rating(args)
+    return None, 204

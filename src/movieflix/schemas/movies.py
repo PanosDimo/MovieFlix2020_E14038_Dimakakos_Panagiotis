@@ -79,3 +79,9 @@ class RateMovieRequest(BaseModel):
 
     movie: UUID
     rating: float = Field(..., ge=0, le=10)
+
+
+class RemoveMovieRatingRequest(BaseModel):
+    """REMOVE MOVIE RATING Request."""
+
+    movie: UUID
