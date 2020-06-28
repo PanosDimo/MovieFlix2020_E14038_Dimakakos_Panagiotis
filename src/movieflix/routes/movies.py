@@ -88,3 +88,15 @@ def create_movie(*, args: schemas.CreateMovieRequest) -> RouteResponsePre:
     """Create movie endpoint."""
     result = methods.create_movie(args)
     return result, 201
+
+
+@blueprint.route("/<movie>", methods=["PUT"])
+@accepts(ContentType.JSON)
+@login_required
+@is_admin
+@request_schema(schemas.UpdateMovieRequest)
+@response_schema(None)
+def update_movie(*, args: schemas.UpdateMovieRequest, movie: str) -> RouteResponsePre:
+    """Create movie endpoint."""
+    methods.update_movie(args)
+    return None, 204

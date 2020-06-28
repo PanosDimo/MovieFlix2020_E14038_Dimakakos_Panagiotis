@@ -164,3 +164,22 @@ def create_movie(args: schemas.CreateMovieRequest) -> models.MovieInDB:
     )
     movies.insert_one(movie.dict(by_alias=True))
     return movie
+
+
+def update_movie(args: schemas.UpdateMovieRequest) -> None:
+    """Update movie.
+
+    :param args: The arguments.
+    """
+    movies = mongo.database.get_collection("movies")
+    datum = movies.find_one({"_id": args.movie})
+    if not datum:
+        abort(404, f"Movie {args.movie} not found")
+    movie = models.MovieInDB(**datum)
+    update = args.dict(exclude={"movie"}, exclude_none=True)
+    if not update:
+        return None
+    movie = movie.copy(update=update)
+    movie.updated_at = datetime.utcnow()
+    movies.update_one({"_id": movie.id}, {"$set": movie.dict(by_alias=True, exclude={"id"})})
+    return None

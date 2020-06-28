@@ -108,3 +108,13 @@ class CreateMovieResponse(BaseModel):
 
     id: UUID
     title: str
+
+
+class UpdateMovieRequest(BaseModel):
+    """UPDATE MOVIE Request."""
+
+    movie: UUID
+    title: Optional[str]
+    year: Optional[int]
+    description: Optional[str]
+    actors: Optional[List[str]]
