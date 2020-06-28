@@ -2,6 +2,7 @@
 from flask import Blueprint
 
 from ..methods import users as methods
+from ..middleware.authentication import login_required
 from ..middleware.content import ContentType, accepts
 from ..middleware.schemas import request_schema, response_schema
 from ..schemas import users as schemas
@@ -28,3 +29,13 @@ def register_user(*, args: schemas.RegisterUserRequest) -> RouteResponsePre:
     """Register user endpoint."""
     result = methods.register_user(info=args)
     return result, 201
+
+
+@blueprint.route("/my/comments", methods=["GET"])
+@accepts(None)
+@login_required
+@response_schema(schemas.GetCommentsResponse)
+def get_my_comments() -> RouteResponsePre:
+    """Get user's comments endpoint."""
+    result = methods.get_my_comments()
+    return result, 200

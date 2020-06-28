@@ -1,4 +1,5 @@
 """Comments Models."""
+from typing import List
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, EmailStr, Field
@@ -17,3 +18,15 @@ class Comment(BaseModel):
 
 class CommentInDB(Base, Comment):
     """Comment in Database Model."""
+
+
+class CommentDeref(Comment):
+    """Comment with Movie Dereferenced Model."""
+
+    movie: str  # type: ignore
+
+
+class Comments(BaseModel):
+    """Comments Model."""
+
+    comments: List[CommentDeref]

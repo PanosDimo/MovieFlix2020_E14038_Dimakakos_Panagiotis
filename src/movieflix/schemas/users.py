@@ -1,4 +1,5 @@
 """User Endpoints Schemas."""
+from typing import List
 from uuid import UUID
 
 from pydantic import BaseModel, EmailStr
@@ -37,3 +38,16 @@ class RegisterUserResponse(BaseModel):
     email: EmailStr
     name: str
     category: Role
+
+
+class GetCommentsResponse(BaseModel):
+    """GET USER COMMENTS Response."""
+
+    class Comment(BaseModel):
+        """Helper Comment class."""
+
+        id: UUID
+        movie: str
+        comment: str
+
+    comments: List[Comment]

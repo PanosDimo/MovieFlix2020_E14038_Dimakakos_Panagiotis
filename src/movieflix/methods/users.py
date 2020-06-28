@@ -1,9 +1,12 @@
 """Users Methods."""
 from flask import abort
 from flask import current_app as app
+from flask import g
 
 from ..database import mongo
 from ..models import users as models
+from ..models.comments import CommentInDB, Comments
+from ..models.movies import MovieInDB
 from ..schemas import users as schemas
 from ..utils import crypto, tokens
 
@@ -46,3 +49,21 @@ def register_user(info: schemas.RegisterUserRequest) -> models.User:
     app.logger.info("Creating user %s", user.id)
     users.insert_one(user.dict(by_alias=True))
     return models.User(**user.dict(by_alias=True))
+
+
+def get_my_comments() -> Comments:
+    """Get user's comments.
+
+    :return: The comments.
+    """
+    user: models.UserInDB = g.user
+    movies = mongo.database.get_collection("movies")
+    comments = mongo.database.get_collection("comments")
+    data = comments.find({"user": user.email})
+    res = []
+    for datum in data:
+        comment = CommentInDB(**datum)
+        movie = MovieInDB(**movies.find_one({"_id": comment.movie}))
+        new_datum = {**comment.dict(exclude={"movie"}), "movie": movie.title}
+        res.append(new_datum)
+    return Comments(comments=res)

@@ -57,13 +57,13 @@ class GetMovieResponse(BaseModel):
 
 
 class GetCommentsRequest(BaseModel):
-    """GET COMMENTS Request."""
+    """GET MOVIE COMMENTS Request."""
 
     movie: UUID
 
 
 class GetCommentsResponse(BaseModel):
-    """GET COMMENTS Response."""
+    """GET MOVIE COMMENTS Response."""
 
     class Comment(BaseModel):
         """Helper Comment class."""
