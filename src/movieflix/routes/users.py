@@ -61,3 +61,14 @@ def get_ratings() -> RouteResponsePre:
     """Get user's ratings endpoint."""
     result = methods.get_my_ratings()
     return result, 200
+
+
+@blueprint.route("/my/comments/<comment>", methods=["DELETE"])
+@accepts(None)
+@login_required
+@request_schema(schemas.DeleteCommentRequest)
+@response_schema(None)
+def delete_my_comment(*, args: schemas.DeleteCommentRequest, comment: str) -> RouteResponsePre:
+    """Delete user's comment endpoint."""
+    methods.delete_my_comment(args)
+    return None, 204

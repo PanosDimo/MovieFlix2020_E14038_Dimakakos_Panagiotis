@@ -65,7 +65,7 @@ def get_my_comments() -> Comments:
     for datum in data:
         comment = CommentInDB(**datum)
         movie = MovieInDB(**movies.find_one({"_id": comment.movie}))
-        new_datum = {**comment.dict(exclude={"movie"}), "movie": movie.title}
+        new_datum = {**comment.dict(by_alias=True, exclude={"movie"}), "movie": movie.title}
         res.append(new_datum)
     return Comments(comments=res)  # type: ignore
 
@@ -82,7 +82,7 @@ def get_all_comments() -> Comments:
     for datum in data:
         comment = CommentInDB(**datum)
         movie = MovieInDB(**movies.find_one({"_id": comment.movie}))
-        new_datum = {**comment.dict(exclude={"movie"}), "movie": movie.title}
+        new_datum = {**comment.dict(by_alias=True, exclude={"movie"}), "movie": movie.title}
         res.append(new_datum)
     return Comments(comments=res)  # type: ignore
 
@@ -100,6 +100,20 @@ def get_my_ratings() -> Ratings:
     for datum in data:
         rating = RatingInDB(**datum)
         movie = MovieInDB(**movies.find_one({"_id": rating.movie}))
-        new_datum = {**rating.dict(exclude={"movie"}), "movie": movie.title}
+        new_datum = {**rating.dict(by_alias=True, exclude={"movie"}), "movie": movie.title}
         res.append(new_datum)
     return Ratings(ratings=res)  # type: ignore
+
+
+def delete_my_comment(args: schemas.DeleteCommentRequest) -> None:
+    """Delete user's comment.
+
+    :param args: The arguments.
+    """
+    user: models.UserInDB = g.user
+    comments = mongo.database.get_collection("comments")
+    datum = comments.find_one({"_id": args.comment, "user": user.email})
+    if not datum:
+        abort(404, f"Comment {args.comment} not found")
+    comments.delete_one({"_id": args.comment, "user": user.email})
+    return None

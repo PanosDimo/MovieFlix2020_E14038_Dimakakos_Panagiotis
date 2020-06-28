@@ -78,3 +78,9 @@ class GetRatingsResponse(BaseModel):
         rating: float = Field(..., ge=0, le=10)
 
     ratings: List[Rating]
+
+
+class DeleteCommentRequest(BaseModel):
+    """DELETE COMMENT Request."""
+
+    comment: UUID
