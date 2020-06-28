@@ -6,8 +6,9 @@ from flask import abort, g
 
 from ..database import mongo
 from ..models import movies as models
+from ..models.comments import CommentInDB
 from ..models.ratings import RatingInDB
-from ..models.users import User
+from ..models.users import UserInDB
 from ..schemas import movies as schemas
 
 
@@ -66,7 +67,7 @@ def rate_movie(args: schemas.RateMovieRequest) -> None:
     """
     movies = mongo.database.get_collection("movies")
     ratings = mongo.database.get_collection("ratings")
-    user: User = g.user
+    user: UserInDB = g.user
     datum = movies.find_one({"_id": args.movie})
     if not datum:
         abort(404, f"Movie {args.movie} not found")
@@ -104,7 +105,7 @@ def remove_movie_rating(args: schemas.RemoveMovieRatingRequest) -> None:
     """
     movies = mongo.database.get_collection("movies")
     ratings = mongo.database.get_collection("ratings")
-    user: User = g.user
+    user: UserInDB = g.user
     datum = movies.find_one({"_id": args.movie})
     if not datum:
         abort(404, f"Movie {args.movie} not found")
@@ -124,4 +125,28 @@ def remove_movie_rating(args: schemas.RemoveMovieRatingRequest) -> None:
     movie.rating = new_rating
     movie.updated_at = datetime.utcnow()
     movies.update_one({"_id": movie.id}, {"$set": movie.dict(by_alias=True, exclude={"id"})})
+    return None
+
+
+def comment_movie(args: schemas.CommentMovieRequest) -> None:
+    """Comment movie.
+
+    :param args: The arguments of the request.
+    """
+    movies = mongo.database.get_collection("movies")
+    comments = mongo.database.get_collection("comments")
+    users = mongo.database.get_collection("users")
+    user: UserInDB = g.user
+    datum = movies.find_one({"_id": args.movie})
+    if not datum:
+        abort(404, f"Movie {args.movie} not found")
+    movie = models.MovieInDB(**datum)
+    comment = CommentInDB(movie=args.movie, user=user.email, comment=args.comment)
+    movie.comments.append(comment.id)
+    movie.updated_at = datetime.utcnow()
+    user.comments.append(comment.id)
+    user.updated_at = datetime.utcnow()
+    comments.insert_one(comment.dict(by_alias=True))
+    movies.update_one({"_id": movie.id}, {"$set": movie.dict(by_alias=True, exclude={"id"})})
+    users.update_one({"_id": user.id}, {"$set": user.dict(by_alias=True, exclude={"id"})})
     return None

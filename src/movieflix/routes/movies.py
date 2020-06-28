@@ -64,3 +64,14 @@ def remove_movie_rating(*, args: schemas.RemoveMovieRatingRequest, movie: str) -
     """Remove movie rating endpoint."""
     methods.remove_movie_rating(args)
     return None, 204
+
+
+@blueprint.route("/<movie>/comment", methods=["POST"])
+@accepts(ContentType.JSON)
+@login_required
+@request_schema(schemas.CommentMovieRequest)
+@response_schema(None)
+def comment_movie(*, args: schemas.CommentMovieRequest, movie: str) -> RouteResponsePre:
+    """Comment movie endpoint."""
+    methods.comment_movie(args)
+    return None, 204

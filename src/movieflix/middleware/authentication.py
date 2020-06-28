@@ -6,7 +6,7 @@ import jwt
 from flask import abort, g, request
 
 from ..database import mongo
-from ..models.users import User
+from ..models.users import UserInDB
 from ..types import Route, RouteResponse
 from ..utils import tokens
 
@@ -39,7 +39,7 @@ def login_required(function: Route) -> Route:
         res = users.find_one({"_id": user_id})
         if res is None:
             abort(401)
-        g.user = User(**res)
+        g.user = UserInDB(**res)
         return function(*args, **kwargs)
 
     return wrapper

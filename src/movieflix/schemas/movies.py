@@ -85,3 +85,10 @@ class RemoveMovieRatingRequest(BaseModel):
     """REMOVE MOVIE RATING Request."""
 
     movie: UUID
+
+
+class CommentMovieRequest(BaseModel):
+    """COMMENT MOVIE Request."""
+
+    movie: UUID
+    comment: str
