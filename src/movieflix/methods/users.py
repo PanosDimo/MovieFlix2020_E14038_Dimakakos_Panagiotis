@@ -7,6 +7,7 @@ from ..database import mongo
 from ..models import users as models
 from ..models.comments import CommentInDB, Comments
 from ..models.movies import MovieInDB
+from ..models.ratings import RatingInDB, Ratings
 from ..schemas import users as schemas
 from ..utils import crypto, tokens
 
@@ -84,3 +85,21 @@ def get_all_comments() -> Comments:
         new_datum = {**comment.dict(exclude={"movie"}), "movie": movie.title}
         res.append(new_datum)
     return Comments(comments=res)  # type: ignore
+
+
+def get_my_ratings() -> Ratings:
+    """Get user's ratings.
+
+    :return: The ratings.
+    """
+    user: models.UserInDB = g.user
+    movies = mongo.database.get_collection("movies")
+    ratings = mongo.database.get_collection("ratings")
+    data = ratings.find({"user": user.email})
+    res = []
+    for datum in data:
+        rating = RatingInDB(**datum)
+        movie = MovieInDB(**movies.find_one({"_id": rating.movie}))
+        new_datum = {**rating.dict(exclude={"movie"}), "movie": movie.title}
+        res.append(new_datum)
+    return Ratings(ratings=res)  # type: ignore

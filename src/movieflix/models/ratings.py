@@ -1,4 +1,5 @@
 """Ratings Models."""
+from typing import List
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, EmailStr, Field
@@ -17,3 +18,15 @@ class Rating(BaseModel):
 
 class RatingInDB(Base, Rating):
     """Rating in Database Model."""
+
+
+class RatingDeref(Rating):
+    """Rating with movie dereferenced Model."""
+
+    movie: str  # type: ignore
+
+
+class Ratings(BaseModel):
+    """Ratings Model."""
+
+    ratings: List[RatingDeref]

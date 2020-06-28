@@ -2,7 +2,7 @@
 from typing import List
 from uuid import UUID
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 
 from ..models.users import Role
 
@@ -65,3 +65,16 @@ class GetAllCommentsResponse(BaseModel):
         comment: str
 
     comments: List[Comment]
+
+
+class GetRatingsResponse(BaseModel):
+    """GET USER RATINGS Response."""
+
+    class Rating(BaseModel):
+        """Helper Rating class."""
+
+        id: UUID
+        movie: str
+        rating: float = Field(..., ge=0, le=10)
+
+    ratings: List[Rating]

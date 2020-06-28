@@ -51,3 +51,13 @@ def get_all_comments() -> RouteResponsePre:
     """Get all users' comments endpoint."""
     result = methods.get_all_comments()
     return result, 200
+
+
+@blueprint.route("/my/ratings", methods=["GET"])
+@accepts(None)
+@login_required
+@response_schema(schemas.GetRatingsResponse)
+def get_ratings() -> RouteResponsePre:
+    """Get user's ratings endpoint."""
+    result = methods.get_my_ratings()
+    return result, 200
