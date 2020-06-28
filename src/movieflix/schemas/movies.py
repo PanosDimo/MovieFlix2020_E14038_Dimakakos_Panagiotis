@@ -118,3 +118,9 @@ class UpdateMovieRequest(BaseModel):
     year: Optional[int]
     description: Optional[str]
     actors: Optional[List[str]]
+
+
+class DeleteMovieRequest(BaseModel):
+    """DELETE MOVIE Request."""
+
+    movie: UUID

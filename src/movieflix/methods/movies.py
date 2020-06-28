@@ -183,3 +183,16 @@ def update_movie(args: schemas.UpdateMovieRequest) -> None:
     movie.updated_at = datetime.utcnow()
     movies.update_one({"_id": movie.id}, {"$set": movie.dict(by_alias=True, exclude={"id"})})
     return None
+
+
+def delete_movie(args: schemas.DeleteMovieRequest) -> None:
+    """Delete movie.
+
+    :param args: The arguments.
+    """
+    movies = mongo.database.get_collection("movies")
+    datum = movies.find_one({"_id": args.movie})
+    if not datum:
+        abort(404, f"Movie {args.movie} not found")
+    movies.delete_one({"_id": args.movie})
+    return None

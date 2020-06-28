@@ -97,6 +97,18 @@ def create_movie(*, args: schemas.CreateMovieRequest) -> RouteResponsePre:
 @request_schema(schemas.UpdateMovieRequest)
 @response_schema(None)
 def update_movie(*, args: schemas.UpdateMovieRequest, movie: str) -> RouteResponsePre:
-    """Create movie endpoint."""
+    """Update movie endpoint."""
     methods.update_movie(args)
+    return None, 204
+
+
+@blueprint.route("/<movie>", methods=["DELETE"])
+@accepts(None)
+@login_required
+@is_admin
+@request_schema(schemas.DeleteMovieRequest)
+@response_schema(None)
+def delete_movie(*, args: schemas.DeleteMovieRequest, movie: str) -> RouteResponsePre:
+    """Delete movie endpoint."""
+    methods.delete_movie(args)
     return None, 204
