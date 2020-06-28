@@ -35,6 +35,7 @@ class SearchMoviesResponse(BaseModel):
         id: UUID
         title: str
         year: int
+        rating: float = Field(..., ge=0, le=10)
 
     movies: List[Movie]
 
@@ -52,6 +53,7 @@ class GetMovieResponse(BaseModel):
     year: int
     description: str
     actors: List[str]
+    rating: float = Field(..., ge=0, le=10)
 
 
 class GetCommentsRequest(BaseModel):
@@ -70,3 +72,10 @@ class GetCommentsResponse(BaseModel):
         user: EmailStr
 
     comments: List[Comment]
+
+
+class RateMovieRequest(BaseModel):
+    """RATE MOVIE Request."""
+
+    movie: UUID
+    rating: float = Field(..., ge=0, le=10)

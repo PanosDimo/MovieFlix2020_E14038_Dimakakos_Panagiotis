@@ -1,10 +1,13 @@
 """Movies Methods."""
+from datetime import datetime
 from typing import Any, Dict
 
-from flask import abort
+from flask import abort, g
 
 from ..database import mongo
 from ..models import movies as models
+from ..models.ratings import RatingInDB
+from ..models.users import User
 from ..schemas import movies as schemas
 
 
@@ -54,3 +57,42 @@ def get_comments(args: schemas.GetCommentsRequest) -> models.MovieDeref:
     data = comments.find({"_id": {"$in": movie.comments}})
     comments = [models.Comment(**datum) for datum in data]
     return models.MovieDeref(comments=comments, **movie.dict(by_alias=True, exclude={"comments"}))
+
+
+def rate_movie(args: schemas.RateMovieRequest) -> None:
+    """Rate movie.
+
+    :param args: The arguments of the request.
+    """
+    movies = mongo.database.get_collection("movies")
+    ratings = mongo.database.get_collection("ratings")
+    user: User = g.user
+    datum = movies.find_one({"_id": args.movie})
+    if not datum:
+        abort(404, f"Movie {args.movie} not found")
+    movie = models.MovieInDB(**datum)
+    rating = RatingInDB(movie=args.movie, user=user.email, rating=args.rating)
+    datum = ratings.find_one({"movie": args.movie, "user": user.email})
+    if not datum:
+        ratings.insert_one(rating.dict(by_alias=True))
+    else:
+        rating = RatingInDB(**datum)
+        rating.rating = args.rating
+        rating.updated_at = datetime.utcnow()
+        ratings.update_one(
+            {"movie": args.movie, "user": user.email},
+            {"$set": rating.dict(by_alias=True, exclude={"id"})},
+        )
+    data = ratings.find({"movie": args.movie})
+    new_rating = 0.0
+    num = 0
+    for datum in data:
+        new_rating += RatingInDB(**datum).rating
+        num += 1
+    if num:
+        new_rating = new_rating / num
+    movie.rating = new_rating
+    movie.updated_at = datetime.utcnow()
+    movies.update_one({"_id": movie.id}, {"$set": movie.dict(by_alias=True, exclude={"id"})})
+
+    return None

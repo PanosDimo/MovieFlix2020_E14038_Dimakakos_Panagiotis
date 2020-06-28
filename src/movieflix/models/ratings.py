@@ -6,8 +6,8 @@ from pydantic import BaseModel, EmailStr, Field
 from ._base import Base
 
 
-class Comment(BaseModel):
-    """Comment Model."""
+class Rating(BaseModel):
+    """Rating Model."""
 
     id: UUID = Field(default_factory=uuid4, alias="_id")
     movie: UUID
@@ -15,5 +15,5 @@ class Comment(BaseModel):
     rating: float = Field(..., ge=0, le=10)
 
 
-class CommentInDB(Base, Comment):
-    """Comment in Database Model."""
+class RatingInDB(Base, Rating):
+    """Rating in Database Model."""

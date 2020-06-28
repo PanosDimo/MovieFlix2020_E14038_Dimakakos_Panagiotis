@@ -3,7 +3,7 @@ from flask import Blueprint
 
 from ..methods import movies as methods
 from ..middleware.authentication import login_required
-from ..middleware.content import accepts
+from ..middleware.content import ContentType, accepts
 from ..middleware.schemas import request_schema, response_schema
 from ..schemas import movies as schemas
 from ..types import RouteResponsePre
@@ -42,3 +42,14 @@ def get_comments(*, args: schemas.GetCommentsRequest, movie: str) -> RouteRespon
     """Get comments endpoint."""
     result = methods.get_comments(args)
     return result, 200
+
+
+@blueprint.route("/<movie>/rate", methods=["POST"])
+@accepts(ContentType.JSON)
+@login_required
+@request_schema(schemas.RateMovieRequest)
+@response_schema(None)
+def rate_movie(*, args: schemas.RateMovieRequest, movie: str) -> RouteResponsePre:
+    """Rate movie endpoint."""
+    methods.rate_movie(args)
+    return None, 204
