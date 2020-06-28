@@ -92,3 +92,19 @@ class CommentMovieRequest(BaseModel):
 
     movie: UUID
     comment: str
+
+
+class CreateMovieRequest(BaseModel):
+    """CREATE MOVIE Request."""
+
+    title: str
+    year: int
+    description: str
+    actors: List[str]
+
+
+class CreateMovieResponse(BaseModel):
+    """CREATE MOVIE Response."""
+
+    id: UUID
+    title: str

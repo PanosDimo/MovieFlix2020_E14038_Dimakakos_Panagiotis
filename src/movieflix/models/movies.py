@@ -21,7 +21,7 @@ class Movie(MovieRef):
     year: int = Field(..., ge=0)
     description: str
     actors: List[str] = Field(default_factory=list)
-    rating: float = Field(..., ge=0, le=10)
+    rating: float = Field(0.0, ge=0, le=10)
     comments: List[UUID] = Field(default_factory=list)
 
 

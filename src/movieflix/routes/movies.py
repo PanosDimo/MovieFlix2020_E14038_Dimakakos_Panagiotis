@@ -3,6 +3,7 @@ from flask import Blueprint
 
 from ..methods import movies as methods
 from ..middleware.authentication import login_required
+from ..middleware.authorization import is_admin
 from ..middleware.content import ContentType, accepts
 from ..middleware.schemas import request_schema, response_schema
 from ..schemas import movies as schemas
@@ -75,3 +76,15 @@ def comment_movie(*, args: schemas.CommentMovieRequest, movie: str) -> RouteResp
     """Comment movie endpoint."""
     methods.comment_movie(args)
     return None, 204
+
+
+@blueprint.route("/", methods=["POST"])
+@accepts(ContentType.JSON)
+@login_required
+@is_admin
+@request_schema(schemas.CreateMovieRequest)
+@response_schema(schemas.CreateMovieResponse)
+def create_movie(*, args: schemas.CreateMovieRequest) -> RouteResponsePre:
+    """Create movie endpoint."""
+    result = methods.create_movie(args)
+    return result, 201

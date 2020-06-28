@@ -150,3 +150,17 @@ def comment_movie(args: schemas.CommentMovieRequest) -> None:
     movies.update_one({"_id": movie.id}, {"$set": movie.dict(by_alias=True, exclude={"id"})})
     users.update_one({"_id": user.id}, {"$set": user.dict(by_alias=True, exclude={"id"})})
     return None
+
+
+def create_movie(args: schemas.CreateMovieRequest) -> models.MovieInDB:
+    """Create movie.
+
+    :param args: The arguments.
+    :return: The created movie.
+    """
+    movies = mongo.database.get_collection("movies")
+    movie = models.MovieInDB(
+        title=args.title, year=args.year, description=args.description, actors=args.actors
+    )
+    movies.insert_one(movie.dict(by_alias=True))
+    return movie
