@@ -112,9 +112,19 @@ def delete_my_comment(args: schemas.DeleteCommentRequest) -> None:
     """
     user: models.UserInDB = g.user
     comments = mongo.database.get_collection("comments")
+    movies = mongo.database.get_collection("movies")
+    users = mongo.database.get_collection("users")
     datum = comments.find_one({"_id": args.comment, "user": user.email})
     if not datum:
         abort(404, f"Comment {args.comment} not found")
+    comment = CommentInDB(**datum)
+    movie_id = comment.movie
+    datum = movies.find_one({"_id": movie_id})
+    movie = MovieInDB(**datum)
+    movie.comments.remove(args.comment)
+    movies.update_one({"_id": movie_id}, {"$set": movie.dict(by_alias=True, exclude={"id"})})
+    user.comments.remove(args.comment)
+    users.update_one({"_id": user.id}, {"$set": user.dict(by_alias=True, exclude={"id"})})
     comments.delete_one({"_id": args.comment, "user": user.email})
     return None
 
@@ -124,4 +134,30 @@ def delete_my_account() -> None:
     user: models.UserInDB = g.user
     users = mongo.database.get_collection("users")
     users.delete_one({"_id": user.id})
+    return None
+
+
+def delete_comment(args: schemas.DeleteCommentRequest) -> None:
+    """Delete any user's comment.
+
+    :param args: The arguments.
+    """
+    comments = mongo.database.get_collection("comments")
+    movies = mongo.database.get_collection("movies")
+    users = mongo.database.get_collection("users")
+    datum = comments.find_one({"_id": args.comment})
+    if not datum:
+        abort(404, f"Comment {args.comment} not found")
+    comment = CommentInDB(**datum)
+    movie_id = comment.movie
+    user_email = comment.user
+    datum = movies.find_one({"_id": movie_id})
+    movie = MovieInDB(**datum)
+    movie.comments.remove(args.comment)
+    movies.update_one({"_id": movie_id}, {"$set": movie.dict(by_alias=True, exclude={"id"})})
+    datum = users.find_one({"email": user_email})
+    user = models.UserInDB(**datum)
+    user.comments.remove(args.comment)
+    users.update_one({"_id": user.id}, {"$set": user.dict(by_alias=True, exclude={"id"})})
+    comments.delete_one({"_id": args.comment, "user": user.email})
     return None
