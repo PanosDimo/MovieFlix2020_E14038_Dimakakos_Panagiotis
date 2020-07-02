@@ -94,3 +94,26 @@ def delete_my_account() -> RouteResponsePre:
     """Delete user's account."""
     methods.delete_my_account()
     return None, 204
+
+
+@blueprint.route("/", methods=["GET"])
+@accepts(None)
+@login_required
+@is_admin
+@response_schema(schemas.GetUsersResponse)
+def get_users() -> RouteResponsePre:
+    """Get all users endpoint."""
+    result = methods.get_users()
+    return result, 200
+
+
+@blueprint.route("/<user>", methods=["DELETE"])
+@accepts(None)
+@login_required
+@is_admin
+@request_schema(schemas.DeleteUserRequest)
+@response_schema(None)
+def delete_user(*, args: schemas.DeleteUserRequest, user: str) -> RouteResponsePre:
+    """Delete user endpoint."""
+    methods.delete_user(args)
+    return None, 204

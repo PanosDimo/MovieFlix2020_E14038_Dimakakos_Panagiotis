@@ -84,3 +84,21 @@ class DeleteCommentRequest(BaseModel):
     """DELETE COMMENT Request."""
 
     comment: UUID
+
+
+class GetUsersResponse(BaseModel):
+    """GET USERS Response."""
+
+    class User(BaseModel):
+        """Helper User class."""
+
+        id: UUID
+        email: EmailStr
+
+    users: List[User]
+
+
+class DeleteUserRequest(BaseModel):
+    """DELETE USER Request."""
+
+    user: UUID

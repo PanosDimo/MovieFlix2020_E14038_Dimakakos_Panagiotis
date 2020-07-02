@@ -40,3 +40,9 @@ class UserWithToken(User):
     """User with JWT token Model."""
 
     token: str
+
+
+class Users(BaseModel):
+    """Users Model."""
+
+    users: List[User] = Field(default_factory=list)

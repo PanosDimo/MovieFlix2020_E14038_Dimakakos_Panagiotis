@@ -161,3 +161,29 @@ def delete_comment(args: schemas.DeleteCommentRequest) -> None:
     users.update_one({"_id": user.id}, {"$set": user.dict(by_alias=True, exclude={"id"})})
     comments.delete_one({"_id": args.comment, "user": user.email})
     return None
+
+
+def get_users() -> models.Users:
+    """Get all users.
+
+    :return: The users.
+    """
+    users = mongo.database.get_collection("users")
+    data = users.find()
+    return models.Users(users=[models.User(**datum) for datum in data])
+
+
+def delete_user(args: schemas.DeleteUserRequest) -> None:
+    """Delete user.
+
+    :param args: The arguments.
+    """
+    users = mongo.database.get_collection("users")
+    datum = users.find_one({"_id": args.user})
+    if not datum:
+        abort(404, f"User {args.user} not found")
+    user = models.UserInDB(**datum)
+    if user.category == models.Role.ADMIN:
+        abort(400, f"Bad request")
+    users.delete_one({"_id": user.id})
+    return None
