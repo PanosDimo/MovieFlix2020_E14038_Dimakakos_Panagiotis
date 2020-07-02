@@ -191,8 +191,21 @@ def delete_movie(args: schemas.DeleteMovieRequest) -> None:
     :param args: The arguments.
     """
     movies = mongo.database.get_collection("movies")
+    comments = mongo.database.get_collection("comments")
+    users = mongo.database.get_collection("users")
+    ratings = mongo.database.get_collection("ratings")
     datum = movies.find_one({"_id": args.movie})
     if not datum:
         abort(404, f"Movie {args.movie} not found")
+    movie = models.MovieInDB(**datum)
     movies.delete_one({"_id": args.movie})
+    for comment_id in movie.comments:
+        datum = comments.find_one({"_id": comment_id})
+        comment = CommentInDB(**datum)
+        datum = users.find_one({"email": comment.user})
+        user = UserInDB(**datum)
+        user.comments.remove(comment.id)
+        users.update_one({"_id": user.id}, {"$set": user.dict(by_alias=True, exclude={"id"})})
+    comments.delete_many({"movie": args.movie})
+    ratings.delete_many({"movie": args.movie})
     return None

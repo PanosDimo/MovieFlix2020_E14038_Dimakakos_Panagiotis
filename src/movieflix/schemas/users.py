@@ -94,11 +94,18 @@ class GetUsersResponse(BaseModel):
 
         id: UUID
         email: EmailStr
+        category: Role
 
     users: List[User]
 
 
 class DeleteUserRequest(BaseModel):
     """DELETE USER Request."""
+
+    user: UUID
+
+
+class MakeAdminRequest(BaseModel):
+    """MAKE ADMIN USER Request."""
 
     user: UUID

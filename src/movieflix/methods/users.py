@@ -184,6 +184,23 @@ def delete_user(args: schemas.DeleteUserRequest) -> None:
         abort(404, f"User {args.user} not found")
     user = models.UserInDB(**datum)
     if user.category == models.Role.ADMIN:
-        abort(400, f"Bad request")
+        abort(400, "Bad request")
     users.delete_one({"_id": user.id})
+    return None
+
+
+def make_admin(args: schemas.MakeAdminRequest) -> None:
+    """Make admin user.
+
+    :param args: The arguments.
+    """
+    users = mongo.database.get_collection("users")
+    datum = users.find_one({"_id": args.user})
+    if not datum:
+        abort(404, f"User {args.user} not found")
+    user = models.UserInDB(**datum)
+    if user.category == models.Role.ADMIN:
+        return None
+    user.category = models.Role.ADMIN
+    users.update_one({"_id": user.id}, {"$set": user.dict(by_alias=True, exclude={"id"})})
     return None

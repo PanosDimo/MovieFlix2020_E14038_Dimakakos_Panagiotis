@@ -117,3 +117,15 @@ def delete_user(*, args: schemas.DeleteUserRequest, user: str) -> RouteResponseP
     """Delete user endpoint."""
     methods.delete_user(args)
     return None, 204
+
+
+@blueprint.route("/<user>/admin", methods=["POST"])
+@accepts(None)
+@login_required
+@is_admin
+@request_schema(schemas.MakeAdminRequest)
+@response_schema(None)
+def make_admin(*, args: schemas.MakeAdminRequest, user: str) -> RouteResponsePre:
+    """Make admin user endpoint."""
+    methods.make_admin(args)
+    return None, 204
