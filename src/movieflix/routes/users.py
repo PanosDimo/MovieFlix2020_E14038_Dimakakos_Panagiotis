@@ -4,7 +4,6 @@ from flask import Blueprint
 from ..methods import users as methods
 from ..middleware.authentication import login_required
 from ..middleware.authorization import is_admin
-from ..middleware.content import ContentType, accepts
 from ..middleware.schemas import request_schema, response_schema
 from ..schemas import users as schemas
 from ..types import RouteResponsePre
@@ -13,7 +12,6 @@ blueprint = Blueprint("users", __name__, url_prefix="/users")
 
 
 @blueprint.route("/authenticate", methods=["POST"])
-@accepts(ContentType.JSON)
 @request_schema(schemas.AuthenticateUserRequest)
 @response_schema(schemas.AuthenticateUserResponse)
 def authenticate_user(*, args: schemas.AuthenticateUserRequest) -> RouteResponsePre:
@@ -23,7 +21,6 @@ def authenticate_user(*, args: schemas.AuthenticateUserRequest) -> RouteResponse
 
 
 @blueprint.route("/register", methods=["POST"])
-@accepts(ContentType.JSON)
 @request_schema(schemas.RegisterUserRequest)
 @response_schema(schemas.RegisterUserResponse)
 def register_user(*, args: schemas.RegisterUserRequest) -> RouteResponsePre:
@@ -33,7 +30,6 @@ def register_user(*, args: schemas.RegisterUserRequest) -> RouteResponsePre:
 
 
 @blueprint.route("/my/comments", methods=["GET"])
-@accepts(None)
 @login_required
 @response_schema(schemas.GetCommentsResponse)
 def get_my_comments() -> RouteResponsePre:
@@ -43,7 +39,6 @@ def get_my_comments() -> RouteResponsePre:
 
 
 @blueprint.route("/comments", methods=["GET"])
-@accepts(None)
 @login_required
 @is_admin
 @response_schema(schemas.GetAllCommentsResponse)
@@ -54,7 +49,6 @@ def get_all_comments() -> RouteResponsePre:
 
 
 @blueprint.route("/comments/<comment>", methods=["DELETE"])
-@accepts(None)
 @login_required
 @is_admin
 @request_schema(schemas.DeleteCommentRequest)
@@ -66,7 +60,6 @@ def delete_comment(*, args: schemas.DeleteCommentRequest, comment: str) -> Route
 
 
 @blueprint.route("/my/ratings", methods=["GET"])
-@accepts(None)
 @login_required
 @response_schema(schemas.GetRatingsResponse)
 def get_ratings() -> RouteResponsePre:
@@ -76,7 +69,6 @@ def get_ratings() -> RouteResponsePre:
 
 
 @blueprint.route("/my/comments/<comment>", methods=["DELETE"])
-@accepts(None)
 @login_required
 @request_schema(schemas.DeleteCommentRequest)
 @response_schema(None)
@@ -87,7 +79,6 @@ def delete_my_comment(*, args: schemas.DeleteCommentRequest, comment: str) -> Ro
 
 
 @blueprint.route("/my/account", methods=["DELETE"])
-@accepts(None)
 @login_required
 @response_schema(None)
 def delete_my_account() -> RouteResponsePre:
@@ -97,7 +88,6 @@ def delete_my_account() -> RouteResponsePre:
 
 
 @blueprint.route("/", methods=["GET"])
-@accepts(None)
 @login_required
 @is_admin
 @response_schema(schemas.GetUsersResponse)
@@ -108,7 +98,6 @@ def get_users() -> RouteResponsePre:
 
 
 @blueprint.route("/<user>", methods=["DELETE"])
-@accepts(None)
 @login_required
 @is_admin
 @request_schema(schemas.DeleteUserRequest)
@@ -120,7 +109,6 @@ def delete_user(*, args: schemas.DeleteUserRequest, user: str) -> RouteResponseP
 
 
 @blueprint.route("/<user>/admin", methods=["POST"])
-@accepts(None)
 @login_required
 @is_admin
 @request_schema(schemas.MakeAdminRequest)
